@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ôn tập giữa kì I Tiếng Anh 6</title>
+<style>
+:root{--blue:#2563eb;--pale:#eff6ff;--ink:#172033;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:var(--ink);font:16px/1.55 Arial,sans-serif}
+body.nocopy{-webkit-user-select:none;user-select:none}input,textarea{user-select:text}
+header{background:linear-gradient(120deg,#1d4ed8,#7c3aed);color:white;padding:24px 16px;text-align:center}
+header h1{font-size:clamp(22px,4vw,32px);margin:0 0 6px}header p{margin:0}
+main{max-width:1100px;margin:20px auto;padding:0 12px}
+.panel{background:#fff;border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 4px 16px #1720330d}
+.lock{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.lock input{max-width:180px}
+input,textarea,button{font:inherit}input[type=password],input[type=text],textarea{border:1px solid #cbd5e1;border-radius:9px;padding:10px;width:100%}
+button{border:0;border-radius:9px;padding:10px 14px;background:var(--blue);color:white;cursor:pointer;font-weight:700}
+button.secondary{background:#475569}button.reset{background:#b91c1c}button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{background:#dbeafe;color:#1e3a8a}.tabs button.active{background:var(--blue);color:#fff}
+h2{margin-top:0;font-size:22px}.muted{color:#64748b}.score{font-weight:bold;color:#1d4ed8}.question{border:1px solid #dbe3ef;border-radius:12px;padding:14px;margin:12px 0}
+.options{display:grid;gap:8px;margin-top:12px}.opt{background:#f8fafc;border:1px solid #cbd5e1;color:#172033;text-align:left;font-weight:500}.opt.correct{background:#dcfce7;border-color:#16a34a}.opt.wrong{background:#fee2e2;border-color:#dc2626}
+.feedback{margin-top:10px;padding:10px;border-radius:8px;background:#f1f5f9}.good{color:var(--green);font-weight:bold}.bad{color:var(--red);font-weight:bold}
+.reading-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.scrollbox{border:1px solid #cbd5e1;border-radius:10px;padding:14px;max-height:68vh;overflow:auto;min-width:0}.passage{white-space:pre-line}.translation{margin-top:12px}.translation summary{cursor:pointer;color:#1d4ed8;font-weight:bold}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.hint{background:#fef3c7;padding:10px;border-radius:8px;margin-top:10px}.writeanswer{margin-top:10px}.writeanswer textarea{min-height:70px}.write-prompt{background:#f8fafc;border:1px solid #dbe3ef;border-radius:10px;padding:12px;margin:10px 0}.answer-blank{background:#fde047;border-radius:4px;padding:2px 8px;display:inline-block;min-width:100px;color:#713f12;font-weight:700}.write-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.tiny{font-size:13px}
+@media(max-width:720px){.reading-layout{grid-template-columns:1fr}.scrollbox{max-height:none}.panel{padding:14px}.tabs button{flex:1}}
+</style>
+</head>
+<body class="nocopy">
+<header><h1>ĐỀ CƯƠNG ÔN TẬP GIỮA KÌ I – TIẾNG ANH 6</h1><p>Năm học 2026–2027 · Chọn đáp án, chấm điểm và xem giải thích ngay</p></header>
+<main>
+<section class="panel" id="gate"><h2>🔐 Đăng nhập làm bài</h2><p>Nhập mật khẩu để mở bài tập.</p><div class="lock"><input id="password" type="password" placeholder="Mật khẩu"><button onclick="unlock()">Vào làm bài</button></div><p id="gateMsg" class="bad"></p></section>
+<div id="app" class="hidden">
+<section class="panel"><div class="tabs" id="tabs"></div><p class="muted tiny">Mỗi câu chỉ được trả lời một lần. Nút Reset của phần/câu sẽ xóa kết quả và mở lại lượt làm tương ứng.</p></section>
+<section class="panel" id="exercise"></section>
+</div>
+</main>
+<script>
+const data = {
+phonetics:{title:"I. PHONETICS",intro:"Choose the word which has the underlined part pronounced differently from the others.",questions:[
+{q:"1. Choose the word with a different final -s sound.",opts:["schools","shops","pets","carts"],a:0,exp:"schools kết thúc bằng âm /z/. Shops, pets và carts kết thúc bằng âm /s/."},
+{q:"2. Choose the word which has the underlined part pronounced differently.",opts:["pens","closets","sweets","lamps"],a:0,exp:"Theo đáp án bạn cung cấp, đáp án đúng là A. pens.",ambiguous:false},
+{q:"3. Choose the word with a different final -s sound.",opts:["rulers","pencils","bags","books"],a:3,exp:"Rulers, pencils và bags có đuôi -s phát âm /z/. Books có đuôi -s phát âm /s/."},
+{q:"4. Choose the word with a different final -s/-es sound.",opts:["matches","makes","brushes","peaches"],a:1,exp:"Matches, brushes và peaches có đuôi -es phát âm /ɪz/. Makes có đuôi -s phát âm /s/."},
+{q:"5. Choose the word with a different final -s sound.",opts:["looks","pens","maps","gets"],a:1,exp:"Pens có đuôi -s phát âm /z/. Looks, maps và gets có đuôi -s phát âm /s/."}]},
+grammar:{title:"II. GRAMMAR & VOCABULARY",intro:"Choose the best answer, A, B, C or D to complete the sentence.",questions:[
+{q:"1. I have a new ________, but I don’t wear it every day.",opts:["pencil case","notebook","bicycle","uniform"],a:3,full:"I have a new uniform, but I don’t wear it every day.",vi:"Tôi có một bộ đồng phục mới, nhưng tôi không mặc nó hằng ngày.",exp:"Uniform (đồng phục) phù hợp với động từ wear (mặc)."},
+{q:"2. My brother ________ to school every day.",opts:["walk","walks","is walking","walking"],a:1,full:"My brother walks to school every day.",vi:"Anh/em trai tôi đi bộ đến trường mỗi ngày.",exp:"Thì hiện tại đơn: chủ ngữ số ít ngôi thứ ba (my brother) + động từ thêm -s/-es."},
+{q:"3. Linda and Tom ________ to school every day.",opts:["go","goes","are going","going"],a:0,full:"Linda and Tom go to school every day.",vi:"Linda và Tom đi học mỗi ngày.",exp:"Linda and Tom là chủ ngữ số nhiều, dùng động từ nguyên mẫu go trong thì hiện tại đơn."},
+{q:"4. Her mother ________ films in the evening.",opts:["often watch","watch often","often watches","watches often"],a:2,full:"Her mother often watches films in the evening.",vi:"Mẹ của cô ấy thường xem phim vào buổi tối.",exp:"Chủ ngữ her mother là ngôi thứ ba số ít nên watch → watches. Trạng từ tần suất thường đứng trước động từ thường."},
+{q:"5. What ________ do in your free time?",opts:["you do usually","do you usually","does you usually","usually do you"],a:1,full:"What do you usually do in your free time?",vi:"Bạn thường làm gì vào thời gian rảnh?",exp:"Câu hỏi hiện tại đơn: Wh-word + do + chủ ngữ + usually + động từ nguyên mẫu."},
+{q:"6. My school ________ a big library.",opts:["have","has","had","having"],a:1,full:"My school has a big library.",vi:"Trường tôi có một thư viện lớn.",exp:"My school là chủ ngữ số ít, dùng has ở hiện tại đơn."},
+{q:"7. David is ________ brother.",opts:["Linda","Linda’","Linda’s","Linda of"],a:2,full:"David is Linda’s brother.",vi:"David là anh/em trai của Linda.",exp:"Sở hữu cách với tên riêng số ít: Linda + ’s = Linda’s."},
+{q:"8. ________ she your sister?",opts:["Is","Are","Do","Does"],a:0,full:"Is she your sister?",vi:"Cô ấy có phải là chị/em gái của bạn không?",exp:"Câu với động từ to be ở hiện tại đơn: Is + she + ...?"},
+{q:"9. In the living room, the table is ________ the sofa and the TV.",opts:["on","next to","under","between"],a:3,full:"In the living room, the table is between the sofa and the TV.",vi:"Trong phòng khách, chiếc bàn nằm giữa ghế sofa và TV.",exp:"Between ... and ... = ở giữa ... và ..."},
+{q:"10. I ________ football, but my brother ________ badminton.",opts:["likes - like","like - likes","am like - is like","like - is likes"],a:1,full:"I like football, but my brother likes badminton.",vi:"Tôi thích bóng đá, nhưng anh/em trai tôi thích cầu lông.",exp:"I + like; my brother (ngôi thứ ba số ít) + likes."},
+{q:"11. “Where are your children?” “They ________ TV in the living room now.”",opts:["is watching","watches","are watching","watches"],a:2,full:"“Where are your children?” “They are watching TV in the living room now.”",vi:"“Các con của bạn đâu rồi?” “Bọn trẻ đang xem TV trong phòng khách.”",exp:"Now diễn tả hành động đang xảy ra: hiện tại tiếp diễn, They + are + V-ing."},
+{q:"12. Tom is opening the ________ to get some food.",opts:["wardrobe","fridge","chest of drawers","dishwasher"],a:1,full:"Tom is opening the fridge to get some food.",vi:"Tom đang mở tủ lạnh để lấy thức ăn.",exp:"Fridge = tủ lạnh, nơi cất giữ thức ăn."},
+{q:"13. Her mum is cooking lunch ________ the kitchen at the moment.",opts:["in","in front of","on","behind"],a:0,full:"Her mum is cooking lunch in the kitchen at the moment.",vi:"Mẹ cô ấy đang nấu bữa trưa trong bếp lúc này.",exp:"In the kitchen = ở trong nhà bếp."},
+{q:"14. I can’t watch TV because my brother is standing ________ me.",opts:["on","in front of","behind","under"],a:1,full:"I can’t watch TV because my brother is standing in front of me.",vi:"Tôi không thể xem TV vì anh/em trai tôi đang đứng phía trước tôi.",exp:"In front of = ở phía trước."},
+{q:"15. His ________ shoes are nice and expensive.",opts:["sisters","sister’","sister’s","sister"],a:2,full:"His sister’s shoes are nice and expensive.",vi:"Giày của chị/em gái cậu ấy đẹp và đắt tiền.",exp:"Sở hữu cách: sister’s shoes = giày của chị/em gái."},
+{q:"16. There ________ two bathrooms in ________ house.",opts:["are/Peter","is/Peter’s","are/Peter’s","is/Peter"],a:2,full:"There are two bathrooms in Peter’s house.",vi:"Có hai phòng tắm trong nhà của Peter.",exp:"There are + danh từ số nhiều; Peter’s house = nhà của Peter."},
+{q:"17. Tom is really ________. He always does his homework after dinner every day.",opts:["hard-working","shy","confident","active"],a:0,full:"Tom is really hard-working. He always does his homework after dinner every day.",vi:"Tom thực sự chăm chỉ. Cậu ấy luôn làm bài tập về nhà sau bữa tối mỗi ngày.",exp:"Hard-working = chăm chỉ; phù hợp với việc luôn làm bài tập."},
+{q:"18. Trang is very ________. She rarely talks to her classmates.",opts:["hard-working","confident","shy","friendly"],a:2,full:"Trang is very shy. She rarely talks to her classmates.",vi:"Trang rất nhút nhát. Cô ấy hiếm khi nói chuyện với các bạn cùng lớp.",exp:"Shy = nhút nhát; rarely talks củng cố ý nghĩa này."},
+{q:"19. That girl can use coffee to paint beautiful pictures. She is so ________.",opts:["funny","creative","kind","friendly"],a:1,full:"That girl can use coffee to paint beautiful pictures. She is so creative.",vi:"Cô gái đó có thể dùng cà phê để vẽ những bức tranh đẹp. Cô ấy thật sáng tạo.",exp:"Creative = sáng tạo, biết nghĩ ra cách làm độc đáo."},
+{q:"20. David and his friends ________ table tennis right now.",opts:["are playing","play","plays","is playing"],a:0,full:"David and his friends are playing table tennis right now.",vi:"David và các bạn của cậu ấy đang chơi bóng bàn ngay lúc này.",exp:"Right now → hiện tại tiếp diễn; chủ ngữ số nhiều dùng are + V-ing."}]},
+reading1:{title:"III. READING – BÀI 1",intro:"Read the passage carefully and choose the correct answer for each question.",passage:"Hi. My name’s Lan. I have lots of friends in my new school and they are all nice to me. We study many subjects: Maths, Science, Literature, Physics, History and English. I have a new uniform. It looks nice. I wear it on Mondays only. I have lessons in the morning from 8 to 11.45. At break time, I often play badminton with my friends or chat. In the afternoon, I read books in the library or do the exercises at home. After dinner in the evening, I often watch TV or listen to music. I usually go to bed at 10. I always get up early in the morning so I never go to school late.",translation:"Xin chào. Mình tên là Lan. Mình có nhiều bạn ở trường mới và tất cả các bạn đều đối xử tốt với mình. Chúng mình học nhiều môn: Toán, Khoa học, Ngữ văn, Vật lý, Lịch sử và Tiếng Anh. Mình có một bộ đồng phục mới. Nó trông đẹp. Mình chỉ mặc đồng phục vào các ngày thứ Hai. Mình học buổi sáng từ 8 giờ đến 11 giờ 45. Vào giờ ra chơi, mình thường chơi cầu lông với bạn hoặc trò chuyện. Buổi chiều, mình đọc sách trong thư viện hoặc làm bài tập ở nhà. Sau bữa tối, mình thường xem TV hoặc nghe nhạc. Mình thường đi ngủ lúc 10 giờ. Mình luôn thức dậy sớm vào buổi sáng nên không bao giờ đi học muộn.",questions:[
+{q:"1. What are Lan’s friends like?",opts:["unfriendly","active","shy","nice"],a:3,exp:"Đoạn văn nói “they are all nice to me” = tất cả đều tốt với Lan."},
+{q:"2. How many subjects does Lan study?",opts:["5","6","4","7"],a:1,exp:"Có 6 môn: Maths, Science, Literature, Physics, History và English."},
+{q:"3. When does Lan wear uniform?",opts:["on Monday","on Tuesday","on weekends","on Monday and Tuesday"],a:0,exp:"“I wear it on Mondays only” = Lan chỉ mặc vào thứ Hai."},
+{q:"4. What does Lan do at break time in the morning?",opts:["play badminton","read books","do the exercises","watch TV"],a:0,exp:"Đoạn văn cho biết giờ ra chơi Lan thường chơi cầu lông hoặc trò chuyện."},
+{q:"5. Why does Lan never go to school late?",opts:["goes to bed late","goes to bed early","gets up early","skips breakfast"],a:2,exp:"Lan nói mình luôn thức dậy sớm nên không bao giờ đi học muộn."}]},
+reading2:{title:"III. READING – BÀI 2",intro:"Read the passage carefully and choose the correct answer for each question.",passage:"Lucy is a student. This is her bedroom. She does her homework, plays computer games and relaxes here. There is a desk, a chair, a wardrobe, a bed and a bookshelf in her room. The wardrobe is between the desk and the bed. There is a computer, ten books and five pens on her desk. There are some pictures of her family on the wall. She loves this room so much, so she cleans it regularly.",translation:"Lucy là một học sinh. Đây là phòng ngủ của cô ấy. Cô ấy làm bài tập về nhà, chơi trò chơi máy tính và thư giãn ở đây. Trong phòng có một chiếc bàn, một chiếc ghế, một tủ quần áo, một chiếc giường và một kệ sách. Tủ quần áo nằm giữa bàn và giường. Trên bàn có một máy tính, mười quyển sách và năm chiếc bút. Trên tường có vài bức ảnh gia đình cô ấy. Cô ấy rất yêu căn phòng này nên thường xuyên dọn dẹp nó.",questions:[
+{q:"1. What is her name?",opts:["Hailey","Lucy","Emma","Harry"],a:1,exp:"Câu đầu tiên cho biết tên học sinh là Lucy."},
+{q:"2. What does Lucy do in her bedroom?",opts:["She does her homework.","She sleeps.","She plays computer games.","All are correct."],a:3,exp:"Đoạn văn nói cô ấy làm bài tập, chơi trò chơi máy tính và thư giãn/nghỉ ngơi trong phòng; đáp án dự kiến của đề là D. Lưu ý: “She sleeps” không được nêu trực tiếp, nên câu hỏi/đáp án này chưa hoàn toàn chặt chẽ."},
+{q:"3. What is there in her room?",opts:["television","washing machine","wardrobe","telephone"],a:2,exp:"Đoạn văn liệt kê a wardrobe = một tủ quần áo."},
+{q:"4. Where is the wardrobe?",opts:["next to the chair","between the desk and the bed","in front of the bookshelf","on the wall"],a:1,exp:"“The wardrobe is between the desk and the bed” = tủ quần áo nằm giữa bàn và giường."}]}
+};
+const writing=[
+{q:"1. The cat is behind the wardrobe.",target:"The wardrobe is in front of the cat.",vi:"Con mèo ở phía sau tủ quần áo. → Tủ quần áo ở phía trước con mèo.",exp:"Đổi vị trí nhìn: A is behind B ⇄ B is in front of A.",hint:"The wardrobe is in front of ..."},
+{q:"2. There is a clock and a picture in our living room.",target:"Our living room has a clock and a picture.",vi:"Có một chiếc đồng hồ và một bức tranh trong phòng khách của chúng tôi. → Phòng khách của chúng tôi có một chiếc đồng hồ và một bức tranh.",exp:"There is/are + danh từ + địa điểm ⇄ Địa điểm + has/have + danh từ.",hint:"Our living room + has + ..."},
+{q:"3. The table is to the left of the sofa and to the right of the cupboard.",target:"The table is between the sofa and the cupboard.",vi:"Chiếc bàn ở bên trái ghế sofa và bên phải tủ. → Chiếc bàn nằm giữa ghế sofa và tủ.",exp:"To the left of = bên trái; to the right of = bên phải; between A and B = ở giữa A và B.",hint:"The table is between ... and ..."},
+{q:"4. Hoa’s kitchen has two knives.",target:"There are two knives in Hoa’s kitchen.",vi:"Nhà bếp của Hoa có hai con dao. → Có hai con dao trong nhà bếp của Hoa.",exp:"S + has/have + danh từ ⇄ There is/are + danh từ + địa điểm. Danh từ số nhiều dùng There are.",hint:"There are + two knives + ..."},
+{q:"5. Let’s visit Ha Long Bay.",target:"How about visiting Ha Long Bay?",vi:"Chúng ta hãy tham quan Vịnh Hạ Long nhé. → Hay là chúng ta đi tham quan Vịnh Hạ Long nhé?",exp:"Let’s + V nguyên mẫu ⇄ How about + V-ing ...?",hint:"How about + V-ing ...?"},
+{q:"6. Lan’s hair is long and black.",target:"Lan has long and black hair.",vi:"Tóc của Lan dài và đen. → Lan có mái tóc dài và đen.",exp:"Sở hữu + hair is + tính từ ⇄ Người + has/have + tính từ + hair.",hint:"Lan + has + adjective + hair."},
+{q:"7. The table is in front of the sofa.",target:"The sofa is behind the table.",vi:"Chiếc bàn ở phía trước ghế sofa. → Ghế sofa ở phía sau chiếc bàn.",exp:"A is in front of B ⇄ B is behind A.",hint:"The sofa is behind ..."},
+{q:"8. My new school has many students.",target:"There are many students in my new school.",vi:"Trường mới của tôi có nhiều học sinh. → Có nhiều học sinh ở trường mới của tôi.",exp:"S + has/have + danh từ ⇄ There is/are + danh từ + địa điểm. Students là số nhiều nên dùng There are.",hint:"There are many students ..."},
+{q:"9. There are 40 students in my class.",target:"My class has 40 students.",vi:"Có 40 học sinh trong lớp tôi. → Lớp tôi có 40 học sinh.",exp:"There are + danh từ + địa điểm ⇄ Địa điểm + has/have + danh từ.",hint:"My class + has + ..."},
+{q:"10. How about having a picnic at the park this weekend?",target:"Let’s have a picnic at the park this weekend.",vi:"Cuối tuần này đi dã ngoại ở công viên thì sao? → Chúng ta hãy đi dã ngoại ở công viên vào cuối tuần này nhé.",exp:"How about + V-ing ...? ⇄ Let’s + V nguyên mẫu ...",hint:"Let’s + verb (base form) ..."}
+];
+let current="phonetics", states={}, wstates={}; let wi=0;
+const order=["phonetics","grammar","reading1","reading2","writing"];
+function unlock(){if(document.getElementById('password').value==="367"){document.getElementById('gate').classList.add('hidden');document.getElementById('app').classList.remove('hidden');renderTabs();render()}else document.getElementById('gateMsg').textContent="Mật khẩu chưa đúng. Vui lòng thử lại."}
+document.getElementById('password').addEventListener('keydown',e=>{if(e.key==="Enter")unlock()});
+function renderTabs(){document.getElementById('tabs').innerHTML=order.map(k=>`<button class="${k===current?'active':''}" onclick="current='${k}';renderTabs();render()">${data[k]?.title||'IV. WRITING'}</button>`).join('')}
+function initState(key,n){if(!states[key])states[key]=Array(n).fill(null)}
+function resetSection(key){delete states[key];if(key==="writing")wstates={};render()}
+function render(){const el=document.getElementById('exercise');if(current==="writing"){renderWriting(el);return}const d=data[current];initState(current,d.questions.length);let answered=states[current].filter(x=>x!==null).length,score=states[current].reduce((s,x,i)=>s+(x===null?0:(x===d.questions[i].a?1:0)),0);
+let head=`<h2>${d.title}</h2><p>${d.intro}</p><p class="score">Điểm: ${score}/${d.questions.length} · Đã trả lời: ${answered}/${d.questions.length}</p><button class="reset" onclick="resetSection('${current}')">Reset phần này</button>`;
+if(d.passage){head+=`<div class="reading-layout"><div class="scrollbox"><h3>Reading passage</h3><div class="passage">${d.passage}</div><details class="translation"><summary>Hiện / ẩn bản dịch tiếng Việt</summary><p>${d.translation}</p></details></div><div class="scrollbox"><h3>Questions</h3><p class="muted tiny">Cuộn trong khung này để xem các câu hỏi.</p>${d.questions.map((q,i)=>questionHTML(q,i,current)).join('')}</div></div>`}
+else head+=d.questions.map((q,i)=>questionHTML(q,i,current)).join('');
+el.innerHTML=head}
+function questionHTML(q,i,key){let ans=states[key][i],locked=ans!==null;let opts=q.opts.map((o,j)=>`<button class="opt ${locked&&j===q.a?'correct':''} ${locked&&j===ans&&ans!==q.a?'wrong':''}" ${locked?'disabled':''} onclick="answer('${key}',${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('');
+let feedback=locked?`<div class="feedback">${ans===q.a?'<span class="good">Chính xác!</span>':'<span class="bad">Chưa chính xác.</span>'} ${q.exp}${q.full?`<p><b>Câu hoàn chỉnh:</b> ${q.full}</p><p><b>Nghĩa tiếng Việt:</b> ${q.vi}</p>`:''}${q.ambiguous?'<p><b>Lưu ý:</b> Đề gốc không hiển thị phần gạch chân nên câu này chưa thể xác định chắc chắn một đáp án duy nhất.</p>':''}</div>`:'';
+return `<div class="question"><b>${q.q}</b><div class="options">${opts}</div>${feedback}</div>`}
+function answer(key,i,j){if(states[key][i]!==null)return;states[key][i]=j;render()}
+function writingPrompt(q){
+ const prefixes=['The wardrobe ','Our living room ','The table ','There ','How about ','Lan ','The sofa ','There ','My class ','Let’s '];
+ return `${escapeHTML(prefixes[wi]||'')}<span class="answer-blank">__________</span>`;
+}
+function renderWriting(el){let q=writing[wi];let s=wstates[wi]||{value:"",checked:false,hint:false,feedback:""};wstates[wi]=s;let checked=s.checked;el.innerHTML=`<h2>IV. WRITING</h2><p>Complete the second sentence so that it has the same meaning as the first.</p><p class="score">Câu ${wi+1}/${writing.length} · Điểm: ${writing.filter((x,i)=>wstates[i]?.checked&&wstates[i]?.correct).length}/${writing.filter((x,i)=>wstates[i]?.checked).length} câu đã chấm đúng</p><div class="nav"><button class="secondary" onclick="moveWriting(-1)" ${wi===0?'disabled':''}>← Previous</button><label>Chọn câu: <select onchange="wi=Number(this.value);render()" style="padding:8px;border-radius:8px">${writing.map((x,i)=>`<option value="${i}" ${i===wi?'selected':''}>Câu ${i+1}</option>`).join('')}</select></label><button class="secondary" onclick="moveWriting(1)" ${wi===writing.length-1?'disabled':''}>Next →</button></div><div class="question"><b>Câu gốc:</b><p>${q.q}</p><div class="write-prompt"><b>Hoàn thành câu:</b><p>${writingPrompt(q)}</p></div><label for="wa"><b>Chỉ điền phần tô vàng trong câu:</b></label><textarea id="wa" class="writeanswer" placeholder="Type only the missing part here..." ${checked?'disabled':''} oninput="wstates[wi].value=this.value">${escapeHTML(s.value)}</textarea><div class="write-tools"><button onclick="checkWriting()" ${checked?'disabled':''}>Check</button><button class="secondary" onclick="showHint()">HINT</button><button class="reset" onclick="resetWritingOne()">Reset câu này</button></div>${s.hint?`<div class="hint"><b>Gợi ý cấu trúc:</b> ${q.hint}</div>`:''}${checked?`<div class="feedback">${s.correct?'<span class="good">Chính xác!</span>':'<span class="bad">Chưa chính xác.</span>'}<p><b>Phần tô vàng cần điền:</b> ${['is in front of the cat','has a clock and a picture','is between the sofa and the cupboard','are two knives in Hoa’s kitchen','visiting Ha Long Bay','has long and black hair','is behind the table','are many students in my new school','has 40 students','have a picnic at the park this weekend'][wi]}</p><p><b>Câu hoàn chỉnh:</b> ${q.target}</p><p><b>Giải thích cấu trúc:</b> ${q.exp}</p><p><b>Nghĩa tiếng Việt:</b> ${q.vi}</p></div>`:''}</div><p class="muted tiny">Mỗi câu chỉ được chấm một lần. Reset câu này sẽ mở lại lượt làm của riêng câu đó.</p>`}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function normalize(s){return s.toLowerCase().replace(/[’‘]/g,"'").replace(/[.!?]+$/,"").replace(/\s+/g," ").trim()}
+function checkWriting(){
+ let s=wstates[wi];if(s.checked)return;
+ let typed=document.getElementById('wa').value.trim();
+ if(!typed){alert("Vui lòng nhập phần màu vàng còn thiếu trước khi chấm.");return}
+ s.value=typed;s.checked=true;
+ const missing=['is in front of the cat','has a clock and a picture','is between the sofa and the cupboard','are two knives in Hoa’s kitchen','visiting Ha Long Bay','has long and black hair','is behind the table','are many students in my new school','has 40 students','have a picnic at the park this weekend'];
+ s.correct=normalize(typed)===normalize(missing[wi]);render()
+}
+function showHint(){wstates[wi].hint=true;render()}
+function resetWritingOne(){delete wstates[wi];render()}
+function moveWriting(delta){wi=Math.max(0,Math.min(writing.length-1,wi+delta));render()}
+document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&['c','x','a','u','s','p'].includes(e.key.toLowerCase()))e.preventDefault()});
+</script>
+</body></html>
